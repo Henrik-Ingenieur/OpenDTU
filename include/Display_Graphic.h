@@ -3,6 +3,7 @@
 
 #include "defaults.h"
 #include <U8g2lib.h>
+#include "Display_Diagram.h"
 
 enum DisplayType_t {
     None,
@@ -33,6 +34,7 @@ private:
     void setFont(uint8_t line);
 
     U8G2* _display;
+    DisplayDiagramClass* _DispDiag;
 
     bool _displayTurnedOn;
 

@@ -8,7 +8,7 @@
 std::map<DisplayType_t, std::function<U8G2*(uint8_t, uint8_t, uint8_t, uint8_t)>> display_types = {
     { DisplayType_t::PCD8544, [](uint8_t reset, uint8_t clock, uint8_t data, uint8_t cs) { return new U8G2_PCD8544_84X48_F_4W_HW_SPI(U8G2_R0, cs, data, reset); } },
     { DisplayType_t::SSD1306, [](uint8_t reset, uint8_t clock, uint8_t data, uint8_t cs) { return new U8G2_SSD1306_128X64_NONAME_F_HW_I2C(U8G2_R0, reset, clock, data); } },
-    { DisplayType_t::SH1106, [](uint8_t reset, uint8_t clock, uint8_t data, uint8_t cs) { return new U8G2_SH1106_128X64_NONAME_F_HW_I2C(U8G2_R0, reset, clock, data); } },
+    { DisplayType_t::SH1106,  [](uint8_t reset, uint8_t clock, uint8_t data, uint8_t cs) { return new U8G2_SH1106_128X64_NONAME_F_HW_I2C(U8G2_R0, reset, clock, data); } },
 };
 
 // Language defintion, respect order in languages[] and translation lists
@@ -37,6 +37,7 @@ DisplayGraphicClass::DisplayGraphicClass()
 DisplayGraphicClass::~DisplayGraphicClass()
 {
     delete _display;
+    delete _DispDiag;
 }
 
 void DisplayGraphicClass::init(DisplayType_t type, uint8_t data, uint8_t clk, uint8_t cs, uint8_t reset)
@@ -48,6 +49,8 @@ void DisplayGraphicClass::init(DisplayType_t type, uint8_t data, uint8_t clk, ui
         _display->begin();
         setContrast(DISPLAY_CONTRAST);
         setStatus(true);
+        _DispDiag = new DisplayDiagramClass();   // create diagram class
+        _DispDiag->init(_display);
     }
 }
 
@@ -152,6 +155,7 @@ void DisplayGraphicClass::loop()
             }
             printText(_fmtText, 0);
             _previousMillis = millis();
+            _DispDiag->update();    // draw diagram
         }
         //<=======================
 
