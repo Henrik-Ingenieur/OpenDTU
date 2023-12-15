@@ -85,7 +85,7 @@ void DisplayGraphicClass::printText(const char* text, uint8_t line)
     if (!_isLarge) {
         dispX = (line == 0) ? 5 : 0;
     } else {
-        dispX = (line == 0) ? 20 : 5;
+        dispX = 5;
     }
     setFont(line);
 
@@ -148,6 +148,7 @@ void DisplayGraphicClass::loop()
         //=====> Actual Production ==========
         if (Datastore.getIsAtLeastOneReachable()) {
             displayPowerSave = false;
+            _DispDiag->update();    // draw diagram
             if (Datastore.getTotalAcPowerEnabled() > 999) {
                 snprintf(_fmtText, sizeof(_fmtText), i18n_current_power_kw[_display_language], (Datastore.getTotalAcPowerEnabled() / 1000));
             } else {
@@ -155,7 +156,6 @@ void DisplayGraphicClass::loop()
             }
             printText(_fmtText, 0);
             _previousMillis = millis();
-            _DispDiag->update();    // draw diagram
         }
         //<=======================
 
